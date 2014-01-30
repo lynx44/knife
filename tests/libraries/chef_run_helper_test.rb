@@ -143,4 +143,11 @@ class ChefRunHelperTest < Test::Unit::TestCase
 
     assert_equal(expected, helper.ssh_params.transport_options)
   end
+
+  def test_timeout
+    expected = 50
+    @new_resource.stub(:timeout).and_return(expected)
+
+    assert_equal(expected, helper.timeout)
+  end
 end

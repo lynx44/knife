@@ -11,6 +11,7 @@ attribute :attribute, :kind_of => String
 attribute :cwd, :kind_of => String
 attribute :returns, :kind_of => Array, :default => [0]
 attribute :transport_options, :kind_of => Hash #  for winrm -> { :allow_delegate => true }
+attribute :timeout, :kind_of => Integer, :default => 600
 
 def initialize(*args)
   super

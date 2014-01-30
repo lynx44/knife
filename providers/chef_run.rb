@@ -14,5 +14,6 @@ action :trigger do
     protocol helper.ssh_params.protocol
     returns helper.ssh_params.returns
     transport_options helper.ssh_params.transport_options
+    timeout helper.timeout
   end
 end

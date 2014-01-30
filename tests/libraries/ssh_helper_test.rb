@@ -12,17 +12,17 @@ class SshHelperTest < Test::Unit::TestCase
   end
 
   def setup_helper
-    @helper = KnifeCookbook::SshHelper.new(@@new_resource)
+    @helper = KnifeCookbook::SshHelper.new(@new_resource)
   end
 
   def setup_resource
-    @@new_resource = double()
-    @@new_resource.stub(:protocol => :ssh)
-    @@new_resource.stub(:command)
-    @@new_resource.stub(:search_query)
-    @@new_resource.stub(:username)
-    @@new_resource.stub(:password)
-    @@new_resource.stub(:attribute)
+    @new_resource = double()
+    @new_resource.stub(:protocol => :ssh)
+    @new_resource.stub(:command)
+    @new_resource.stub(:search_query)
+    @new_resource.stub(:username)
+    @new_resource.stub(:password)
+    @new_resource.stub(:attribute)
   end
 
   def setup_logger
@@ -34,7 +34,7 @@ class SshHelperTest < Test::Unit::TestCase
   end
 
   def test_get_command_when_method_ssh_specifies_ssh
-    @@new_resource.stub(:method => :ssh)
+    @new_resource.stub(:method => :ssh)
 
     result = @helper.commands.first
 
@@ -42,7 +42,7 @@ class SshHelperTest < Test::Unit::TestCase
   end
 
   def test_get_command_when_method_winrm_specifies_winrm
-    @@new_resource.stub(:protocol => :winrm)
+    @new_resource.stub(:protocol => :winrm)
 
     result = @helper.commands.first
 
@@ -51,7 +51,7 @@ class SshHelperTest < Test::Unit::TestCase
 
   def test_get_command_includes_search_query
     expectedSearchQuery = 'role:name'
-    @@new_resource.stub(:search_query => expectedSearchQuery)
+    @new_resource.stub(:search_query => expectedSearchQuery)
 
     result = @helper.commands.first
 
@@ -60,7 +60,7 @@ class SshHelperTest < Test::Unit::TestCase
 
   def test_get_command_includes_command
     expectedCommand = 'dir'
-    @@new_resource.stub(:command => expectedCommand)
+    @new_resource.stub(:command => expectedCommand)
 
     result = @helper.commands.first
 
@@ -69,7 +69,7 @@ class SshHelperTest < Test::Unit::TestCase
 
   def test_get_command_includes_username
     expectedUsername = 'user'
-    @@new_resource.stub(:username => expectedUsername)
+    @new_resource.stub(:username => expectedUsername)
 
     result = @helper.commands.first
 
@@ -78,7 +78,7 @@ class SshHelperTest < Test::Unit::TestCase
 
   def test_get_command_includes_password
     expectedPassword = 'user'
-    @@new_resource.stub(:password => expectedPassword)
+    @new_resource.stub(:password => expectedPassword)
 
     result = @helper.commands.first
 
@@ -87,7 +87,7 @@ class SshHelperTest < Test::Unit::TestCase
 
   def test_get_command_includes_attribute
     expectedAttribute = 'ipaddress'
-    @@new_resource.stub(:attribute => expectedAttribute)
+    @new_resource.stub(:attribute => expectedAttribute)
 
     result = @helper.commands.first
 

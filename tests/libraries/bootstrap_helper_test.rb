@@ -11,7 +11,7 @@ class TestBootstrapHelper < Test::Unit::TestCase
   end
 
   def setup_helper
-    @@helper = KnifeCookbook::BootstrapHelper.new(setup_resource)
+    @helper = KnifeCookbook::BootstrapHelper.new(setup_resource)
   end
 
   def setup_resource
@@ -20,7 +20,7 @@ class TestBootstrapHelper < Test::Unit::TestCase
   end
 
   def helper
-    @@helper
+    @helper
   end
 
   def test_build_command_calls_knife_bootstrap

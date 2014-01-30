@@ -4,19 +4,19 @@ module KnifeCookbook
   class SshHelper < CommandBuilder
 
     def initialize(resource)
-      @@resource = resource
+      @resource = resource
     end
 
     def commands
-      ["knife #{@@resource.protocol} \"#{@@resource.search_query}\" \"#{@@resource.command}\"#{serialize_args}"]
+      ["knife #{@resource.protocol} \"#{@resource.search_query}\" \"#{@resource.command}\"#{serialize_args}"]
     end
 
     private
     def arg_hash
       args = Hash.new
-      args['-x '] = "\"#{@@resource.username}\"" if @@resource.username
-      args['-P '] = "\"#{@@resource.password}\"" if @@resource.password
-      args['-a '] = "#{@@resource.attribute}" if @@resource.attribute
+      args['-x '] = "\"#{@resource.username}\"" if @resource.username
+      args['-P '] = "\"#{@resource.password}\"" if @resource.password
+      args['-a '] = "#{@resource.attribute}" if @resource.attribute
       args
     end
 

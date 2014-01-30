@@ -2,7 +2,7 @@ require_relative('recursive_hash')
 
 class NodeMock
   def initialize
-    @@hash = Hash.recursive
+    @hash = Hash.recursive
     @source = OpenStruct.new
   end
 
@@ -11,10 +11,10 @@ class NodeMock
   end
 
   def []=(key,val)
-    @@hash[key] = val
+    @hash[key] = val
   end
 
   def [](key)
-    @@hash[key]
+    @hash[key]
   end
 end
