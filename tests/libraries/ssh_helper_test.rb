@@ -15,6 +15,10 @@ class SshHelperTest < Test::Unit::TestCase
     @helper = KnifeCookbook::SshHelper.new(@new_resource)
   end
 
+  def helper
+    @helper
+  end
+
   def setup_resource
     @new_resource = double()
     @new_resource.stub(:protocol => :ssh)
@@ -36,7 +40,7 @@ class SshHelperTest < Test::Unit::TestCase
   def test_get_command_when_method_ssh_specifies_ssh
     @new_resource.stub(:method => :ssh)
 
-    result = @helper.commands.first
+    result = helper.commands.first.to_s
 
     assert_match('knife ssh', result)
   end
@@ -44,7 +48,7 @@ class SshHelperTest < Test::Unit::TestCase
   def test_get_command_when_method_winrm_specifies_winrm
     @new_resource.stub(:protocol => :winrm)
 
-    result = @helper.commands.first
+    result = helper.commands.first.to_s
 
     assert_match('knife winrm', result)
   end
@@ -53,7 +57,7 @@ class SshHelperTest < Test::Unit::TestCase
     expectedSearchQuery = 'role:name'
     @new_resource.stub(:search_query => expectedSearchQuery)
 
-    result = @helper.commands.first
+    result = helper.commands.first.to_s
 
     assert_match(/knife [\w]+ \"#{expectedSearchQuery}\"/, result)
   end
@@ -62,7 +66,7 @@ class SshHelperTest < Test::Unit::TestCase
     expectedCommand = 'dir'
     @new_resource.stub(:command => expectedCommand)
 
-    result = @helper.commands.first
+    result = helper.commands.first.to_s
 
     assert_match(/knife [\w\s\"]+ \"#{expectedCommand}\"/, result)
   end
@@ -71,7 +75,7 @@ class SshHelperTest < Test::Unit::TestCase
     expectedUsername = 'user'
     @new_resource.stub(:username => expectedUsername)
 
-    result = @helper.commands.first
+    result = helper.commands.first.to_s
 
     assert_match(/knife [\w\s\"]+ -x \"#{expectedUsername}\"/, result)
   end
@@ -80,7 +84,7 @@ class SshHelperTest < Test::Unit::TestCase
     expectedPassword = 'user'
     @new_resource.stub(:password => expectedPassword)
 
-    result = @helper.commands.first
+    result = helper.commands.first.to_s
 
     assert_match(/knife [\w\s\"]+ -P \"#{expectedPassword}\"/, result)
   end
@@ -89,8 +93,16 @@ class SshHelperTest < Test::Unit::TestCase
     expectedAttribute = 'ipaddress'
     @new_resource.stub(:attribute => expectedAttribute)
 
-    result = @helper.commands.first
+    result = helper.commands.first.to_s
 
     assert_match(/knife [\w\s\"]+ -a #{expectedAttribute}/, result)
+  end
+
+  def test_obscured_command_censors_password
+    @new_resource.stub(:password => 'password')
+
+    result = helper.commands.first.obscure
+
+    assert_match(/knife [\w\s\"]+ -P [*]{8}/, result)
   end
 end

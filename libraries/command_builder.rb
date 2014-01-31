@@ -1,12 +1,13 @@
 module KnifeCookbook
   class CommandBuilder
-    #def arg_separator
-    #  ' '
-    #end
-
     def serialize_args
-      serialized = arg_hash.map { |k, v| "#{k}#{v}" }.join(' ')
+      serialized = arg_hash.map { |k, v| format_arg(k, v) }.join(' ')
       serialized ? " #{serialized}" : nil
+    end
+
+    protected
+    def format_arg(key, value)
+      "#{key}#{value}"
     end
   end
 end
