@@ -45,7 +45,7 @@ class WinrmHelperTest < Test::Unit::TestCase
   end
 
   def test_commands_calls_winrs
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_match('winrs', result)
   end
@@ -53,7 +53,7 @@ class WinrmHelperTest < Test::Unit::TestCase
   def test_commands_specifies_address_with_fqdn_by_default
     uri = 'node.server.com'
     setup_nodes([{ 'fqdn' => uri }])
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_match("winrs -r:http://#{uri}:5985", result)
   end
@@ -62,7 +62,7 @@ class WinrmHelperTest < Test::Unit::TestCase
     @new_resource.stub(:attribute => 'ipaddress')
     uri = '192.168.1.44'
     setup_nodes([{ @new_resource.attribute => uri }])
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_match("winrs -r:http://#{uri}:5985", result)
   end
@@ -70,7 +70,7 @@ class WinrmHelperTest < Test::Unit::TestCase
   def test_commands_specifies_username
     expectedUsername = 'user'
     @new_resource.stub(:username => expectedUsername)
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_match(/-u:#{expectedUsername}/, result)
   end
@@ -78,7 +78,7 @@ class WinrmHelperTest < Test::Unit::TestCase
   def test_commands_specifies_password
     expectedPassword = 'password'
     @new_resource.stub(:password => expectedPassword)
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_match(/-p:#{expectedPassword}/, result)
   end
@@ -86,28 +86,28 @@ class WinrmHelperTest < Test::Unit::TestCase
   def test_commands_specifies_command
     expectedCommand = 'chef-client'
     @new_resource.stub(:command => expectedCommand)
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_match(/#{expectedCommand}$/, result)
   end
 
   def test_commands_specifies_allow_delegate
     @new_resource.stub(:transport_options => { :allow_delegate => true })
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_match(/-ad/, result)
   end
 
   def test_commands_nil_transport_options
     @new_resource.stub(:transport_options => nil)
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_false(result.include?('-ad'))
   end
 
   def test_commands_transport_options_without_option_ignores
     @new_resource.stub(:transport_options => { :something => true })
-    result = @helper.commands.first
+    result = @helper.commands.first.to_s
 
     assert_false(result.include?('-ad'))
   end
@@ -116,5 +116,13 @@ class WinrmHelperTest < Test::Unit::TestCase
     setup_nodes([{'fqdn' => 'server1.com'}, {'fqdn' => 'server2.com'}])
 
     assert_equal(2, @helper.commands.length)
+  end
+
+  def test_obscured_command_censors_password
+    @new_resource.stub(:password => 'password')
+
+    result = @helper.commands.first.obscure
+
+    assert_match(/-p:[*]{8}/, result)
   end
 end
