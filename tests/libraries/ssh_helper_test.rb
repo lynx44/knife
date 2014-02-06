@@ -27,6 +27,7 @@ class SshHelperTest < Test::Unit::TestCase
     @new_resource.stub(:username)
     @new_resource.stub(:password)
     @new_resource.stub(:attribute)
+    @new_resource.stub(:port)
   end
 
   def setup_logger
@@ -104,5 +105,14 @@ class SshHelperTest < Test::Unit::TestCase
     result = helper.commands.first.obscure
 
     assert_match(/knife [\w\s\"]+ -P [*]{8}/, result)
+  end
+
+  def test_port_when_specified
+    expectedPort = 123
+    @new_resource.stub(:port => expectedPort)
+
+    result = helper.commands.first.obscure
+
+    assert_match(/knife [\w\s\"]+ -p #{expectedPort}/, result)
   end
 end

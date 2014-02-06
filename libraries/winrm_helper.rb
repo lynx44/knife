@@ -59,15 +59,27 @@ module KnifeCookbook
 
       private
       def format_command
-        "winrs -r:http://#{@address}:5985#{serialize_args} #{@resource.command}"
+        "winrs -r:#{protocol}://#{@address}:#{port}#{serialize_args} #{@resource.command}"
+      end
+
+      def protocol
+        transport_options_value(:ssl) ? 'https' : 'http'
+      end
+
+      def port
+        @resource.port || 5985
       end
 
       def arg_hash
         args = Hash.new
         args[format_key_value_arg('-u')] = @resource.username if @resource.username
         args[format_key_value_arg(@password_flag)] = @resource.password if @resource.password
-        args['-ad'] = nil if @resource.transport_options != nil && @resource.transport_options[:allow_delegate]
+        args['-ad'] = nil if transport_options_value(:allow_delegate)
         args
+      end
+
+      def transport_options_value(key)
+        @resource.transport_options != nil ? @resource.transport_options[key] : nil
       end
     end
   end

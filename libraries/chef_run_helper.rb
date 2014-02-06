@@ -25,6 +25,10 @@ module KnifeCookbook
       @resource.timeout
     end
 
+    def port
+      @resource.port
+    end
+
     private
     def build_command
       chef_client_command = 'chef-client'

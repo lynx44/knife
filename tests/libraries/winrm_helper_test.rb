@@ -25,6 +25,7 @@ class WinrmHelperTest < Test::Unit::TestCase
     @new_resource.stub(:attribute)
     @new_resource.stub(:command)
     @new_resource.stub(:transport_options => { :allow_delegate => false })
+    @new_resource.stub(:port)
   end
 
   def setup_query
@@ -124,5 +125,22 @@ class WinrmHelperTest < Test::Unit::TestCase
     result = @helper.commands.first.obscure
 
     assert_match(/-p:[*]{8}/, result)
+  end
+
+  def test_ssl_option_uses_https
+    @new_resource.stub(:transport_options => { :ssl => true })
+
+    result = @helper.commands.first.to_s
+
+    assert_match(/https:[\/]{2}/, result)
+  end
+
+  def test_port
+    port = 123
+    @new_resource.stub(:port => port)
+
+    result = @helper.commands.first.to_s
+
+    assert_match(/http:[\/]{2}[\w.-]*:#{port}/, result)
   end
 end
