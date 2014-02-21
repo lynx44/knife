@@ -1,4 +1,5 @@
 actions :run
+default_action :run
 
 attribute :address, :kind_of => String, :name_attribute => true
 attribute :node_name, :kind_of => String
@@ -10,8 +11,3 @@ attribute :sudo, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :cwd, :kind_of => String
 attribute :environment, :kind_of => String
 attribute :returns, :kind_of => Array, :default => [0]
-
-def initialize(*args)
-  super
-  @action = :run
-end

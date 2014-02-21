@@ -150,4 +150,11 @@ class ChefRunHelperTest < Test::Unit::TestCase
 
     assert_equal(expected, helper.timeout)
   end
+
+  def test_port
+    expected = 123
+    @new_resource.stub(:port).and_return(expected)
+
+    assert_equal(expected, helper.port)
+  end
 end

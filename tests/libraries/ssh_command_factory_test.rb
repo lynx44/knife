@@ -42,4 +42,14 @@ class SshCommandFactoryTest < Test::Unit::TestCase
 
     assert_kind_of(KnifeCookbook::WinrmHelper, helper)
   end
+
+  def test_create_returns_winrm_helper_when_ssl_specified_and_method_is_winrm
+    @new_resource.stub(:transport_options => { :ssl => true })
+    @new_resource.stub(:protocol => :winrm)
+    Chef::Search::Query.stub(:new).and_return(nil)
+
+    helper = @factory.create(@new_resource)
+
+    assert_kind_of(KnifeCookbook::WinrmHelper, helper)
+  end
 end

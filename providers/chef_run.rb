@@ -15,5 +15,6 @@ action :trigger do
     returns helper.ssh_params.returns
     transport_options helper.ssh_params.transport_options
     timeout helper.timeout
+    port helper.port
   end
 end

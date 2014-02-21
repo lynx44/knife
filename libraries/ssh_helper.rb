@@ -48,6 +48,7 @@ module KnifeCookbook
       args['-x '] = "\"#{@resource.username}\"" if @resource.username
       args[@password_flag] = "\"#{@resource.password}\"" if @resource.password
       args['-a '] = "#{@resource.attribute}" if @resource.attribute
+      args['-p '] = "#{@resource.port}" if @resource.port
       args
     end
   end
