@@ -9,8 +9,7 @@ action :run do
     cwd = @new_resource.cwd
     returns_val = @new_resource.returns
     Chef::Log.info("#{cwd}>#{command}")
-    result = shell_out!(command, { 'cwd' => cwd, "returns" => returns_val })
-    Chef::Log.info(result.stdout)
+    result = shell_out!(command, { 'cwd' => cwd, "returns" => returns_val, "live_stream" => STDOUT })
     helper.verify_output(result.stdout, result.stderr)
   else
     Chef::Log.debug("Skipping bootstrap #{node_name} since client key already exists.")

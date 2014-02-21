@@ -10,10 +10,7 @@ action :run do
   returns_val = @new_resource.returns
   helper.commands.each do |command|
     Chef::Log.info(command.obscure)
-    result = shell_out!(command.to_s, { "cwd" => cwd, "returns" => returns_val, "timeout" => timeout })
-
-    Chef::Log.info(result.stdout)
-    Chef::Log.info(result.stderr)
+    result = shell_out!(command.to_s, { "cwd" => cwd, "returns" => returns_val, "timeout" => timeout, "live_stream" => STDOUT })
     verify_output(result.stdout, result.stderr)
   end
 end
